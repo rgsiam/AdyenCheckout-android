@@ -26,6 +26,51 @@ You can integrate with Adyen library by either:
 
 Include the payment form to make your first payment.
 
+#### Importing the binaries
+
+1. In your `build.gradle` of the root directory add the following line:
+    
+    ```json
+    buildscript {
+        repositories {
+            ...
+        }
+        dependencies {
+            ...
+            classpath 'de.undercouch:gradle-download-task:2.1.0'
+        }
+    }
+    ```
+    This plugin will allow Gradle to download the Adyen library.
+    
+2. In your `build.gradle` of the app module add the following task:
+
+    ```json
+    import de.undercouch.gradle.tasks.download.Download
+    
+    ...
+    
+    task downloadAdyenLibrary(type: Download) {
+        src 'https://raw.githubusercontent.com/Adyen/AdyenCheckout-android/master/adyenpaysdk/adyenpaysdk-1.0.0.aar'
+        src 'https://raw.githubusercontent.com/Adyen/AdyenCheckout-android/master/adyenuisdk/adyenuisdk-1.0.0.aar'
+        dest('libs');
+    }
+    ```
+   Once you run this task using `./gradlew downloadAdyenLibrary` command, the `adyenuisdk` and `adyenpaysdk` .aar files will be downloaded in you `libs` folder.
+   
+3. Next add the following snippet in your `build.gradle` of the app module:
+
+    ```json
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+    ```
+
+
+#### Importing the sources
+
 Follow these steps to edit your `build.gradle` and start using Adyen checkout for your Android application:
 
 1. Run `git pull https://github.com/Adyen/AdyenCheckout-android.git`.
@@ -48,7 +93,9 @@ Follow these steps to edit your `build.gradle` and start using Adyen checkout fo
     compile project(':adyenpaysdk')
     compile project(':adyenuisdk')
     ```
-    
+
+#### Code implementation
+
 Add the `PaymentActivity` in your `AndroidManifest.xml`:
 
 ``` xml
